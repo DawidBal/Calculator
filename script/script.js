@@ -15,13 +15,13 @@ function divide(fVal, sVal) {
 
 function printNumber(number) {
   clearContentOnce();
-  inputArea.textContent += number;
+  inputDisplay.textContent += number;
 }
 
 function clearContentOnce() {
   if (eraseContent) {
     eraseContent = false;
-    inputArea.textContent = "";
+    inputDisplay.textContent = "";
   }
 }
 
@@ -41,16 +41,21 @@ function calculate() {
 
 function resetData() {
   eraseContent = true;
-  calculateNumb = false;
+  allowCalculate = false;
   inputValue = "";
-  inputArea.textContent = 0;
+  inputDisplay.textContent = 0;
 }
-
+// Global Variables
 let eraseContent = true;
-let calculateNumb = false;
-const inputArea = document.querySelector(".calculator__result");
+let allowCalculate = false;
+const inputDisplay = document.querySelector(".calculator__result");
 let inputValue = "";
-const numbers = document.querySelectorAll(".btn");
+const numbers = document.querySelectorAll("[data-number]");
+const operators = document.querySelectorAll("[data-operator]");
+const reset = document.querySelector(".reset");
+const equal = document.querySelector(".equal");
+
+// Math operations
 const operate = {
   "+": add,
   "-": subtract,
@@ -58,26 +63,42 @@ const operate = {
   "/": divide,
 };
 
-numbers.forEach((number) =>
-  number.addEventListener("click", (e) => {
-    const numbers = e.target.getAttribute("data-number");
-    const operator = e.target.getAttribute("data-operator");
-    const reset = e.target.getAttribute("data-reset");
-    const equal = e.target.getAttribute("data-equal");
+// Numbers
 
-    if (numbers) {
-      printNumber(numbers);
-      inputValue += numbers;
+numbers.forEach((number) => {
+  number.addEventListener("click", (e) => {
+    const number = e.target.getAttribute("data-number");
+
+    if (number) {
+      printNumber(number);
+      inputValue += number;
     }
+  });
+});
+
+// Operators
+
+operators.forEach((operator) => {
+  operator.addEventListener("click", (e) => {
+    const operator = e.target.getAttribute("data-operator");
 
     if (operator) {
       eraseContent = true;
 
-      if (calculateNumb) {
-        inputArea.textContent = calculate();
+      if (allowCalculate) {
+        console.log(inputValue);
+        inputDisplay.textContent = calculate();
+        console.log(inputValue);
       }
-      calculateNumb = true;
+
+      allowCalculate = true;
       inputValue += operator;
     }
-  })
-);
+  });
+});
+
+// Reset
+
+reset.addEventListener("click", () => {
+  resetData();
+});
