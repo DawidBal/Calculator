@@ -1,0 +1,172 @@
+/* Global */
+
+:root {
+  --grey: rgb(63, 63, 66);
+  --greyshadow: rgb(19, 19, 20);
+  --lightgrey: rgb(202, 202, 202);
+  --lgshadow: rgb(156, 156, 156);
+  --green: rgb(86, 105, 82);
+  --greenshadow: rgb(53, 65, 51);
+  --white: rgb(255, 255, 255);
+  --orange: rgb(253, 176, 8);
+  --orangeshadow: rgb(192, 133, 4);
+  --red: rgb(194, 31, 3);
+  --redshadow: rgb(133, 23, 4);
+}
+html {
+  font-size: 100%;
+  box-sizing: border-box;
+}
+
+*,
+*::after,
+*::before {
+  box-sizing: inherit;
+}
+
+body {
+  font-size: 1rem;
+  font-family: "Open Sans", sans-serif;
+}
+
+/* Flexbox */
+
+.flex {
+  display: flex;
+}
+.flex-jc-c {
+  justify-content: center;
+}
+.flex-ai-c {
+  align-items: center;
+}
+
+/* Content */
+.main {
+  width: 80%;
+  margin: 0 auto;
+  padding: 20px;
+}
+.calculator {
+  width: 100%;
+  background: var(--grey);
+  border-radius: 15px;
+  box-shadow: 0 3px 0 var(--greyshadow);
+}
+
+/* Grid */
+
+.grid {
+  display: grid;
+}
+
+.calculator__buttons {
+  grid-template-columns: repeat(3, calc(25% - 6px));
+  grid-template-rows: repeat(5, 1fr);
+  grid-template-areas:
+    "Reset Reset Divide Multi"
+    "Seven Eight Nine Subst"
+    "Four Five Six Add"
+    "One Two Three Equal"
+    "Zero Zero Dot Equal";
+  gap: 6px;
+
+  margin: 1rem;
+}
+
+.calculator__display {
+  font-size: 1.5rem;
+  padding: 1rem;
+  margin: 1rem;
+  height: 61px;
+
+  background: var(--green);
+  border: 1px solid var(--green);
+  color: var(--white);
+  border-radius: 15px;
+  box-shadow: 0 3px 0 var(--greenshadow);
+}
+.calculator__result {
+  display: block;
+  text-align: right;
+}
+
+/* Buttons Grid */
+.btn {
+  width: 100%;
+  height: 100%;
+  padding: 16px;
+  font-size: 2rem;
+  background: var(--lightgrey);
+  border: 1px solid var(--lightgrey);
+  border-radius: 15px;
+  box-shadow: 0 3px 0 var(--lgshadow);
+}
+.btn--orange {
+  background: var(--orange);
+  border: 1px solid var(--orange);
+  box-shadow: 0 3px 0 var(--orangeshadow);
+  color: var(--white);
+  font-weight: bold;
+}
+.btn--red {
+  background: var(--red);
+  border: 1px solid var(--red);
+  box-shadow: 0 3px 0 var(--redshadow);
+  color: var(--white);
+  font-weight: bold;
+}
+.btn:hover {
+  transform: scale(1.05);
+}
+.btn:active {
+  transform: scale(0.99);
+}
+.btn-c {
+  grid-area: Reset;
+}
+.btn-7 {
+  grid-area: Seven;
+}
+.btn-8 {
+  grid-area: Eight;
+}
+.btn-9 {
+  grid-area: Nine;
+}
+.btn-div {
+  grid-area: Divide;
+}
+.btn-4 {
+  grid-area: Four;
+}
+.btn-5 {
+  grid-area: Five;
+}
+.btn-6 {
+  grid-area: Six;
+}
+.btn-mul {
+  grid-area: Multi;
+}
+.btn-1 {
+  grid-area: One;
+}
+.btn-2 {
+  grid-area: Two;
+}
+.btn-3 {
+  grid-area: Three;
+}
+.btn-sub {
+  grid-area: Subst;
+}
+.btn-0 {
+  grid-area: Zero;
+}
+.btn-equ {
+  grid-area: Equal;
+}
+.btn-add {
+  grid-area: Add;
+}
