@@ -7,10 +7,35 @@
     <link rel="stylesheet" href="./css/normalize.css">
     <link rel="stylesheet" href="./css/style.css">
     <script src="./script/script.js" defer></script>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;700&display=swap" rel="stylesheet"> 
 </head>
 <body>
-    <div class="content-wrapper">
-
-    </div>
+    <main class="main flex flex-jc-c flex-ai-c">
+        <section class="calculator">
+            <div class="calculator__display">
+                <span class="calculator__result">0</span>
+            </div>
+            <div class="calculator__buttons grid">
+                <div class="calculator__button btn-7"><button class="btn" data-number="7">7</button></div>
+                <div class="calculator__button btn-8"><button class="btn" data-number="8">8</button></div>
+                <div class="calculator__button btn-9"><button class="btn" data-number="9">9</button></div>
+                <div class="calculator__button btn-4"><button class="btn" data-number="4">4</button></div>
+                <div class="calculator__button btn-5"><button class="btn" data-number="5">5</button></div>
+                <div class="calculator__button btn-6"><button class="btn" data-number="6">6</button></div>
+                <div class="calculator__button btn-1"><button class="btn" data-number="1">1</button></div>
+                <div class="calculator__button btn-2"><button class="btn" data-number="2">2</button></div>
+                <div class="calculator__button btn-3"><button class="btn" data-number="3">3</button></div>
+                <div class="calculator__button btn-0"><button class="btn" data-number="0">0</button></div>
+                <div class="calculator__button btn-dot"><button class="btn" data-number=".">.</button></div>
+                <div class="calculator__button btn-equ"><button class="btn btn--orange" data-equal="eq">=</button></div>
+                <div class="calculator__button btn-add"><button class="btn" data-operator=" + ">+</button></div>
+                <div class="calculator__button btn-sub"><button class="btn" data-operator=" - ">-</button></div>
+                <div class="calculator__button btn-mul"><button class="btn" data-operator=" * ">x</button></div>
+                <div class="calculator__button btn-div"><button class="btn" data-operator=" / ">/</button></div>
+                <div class="calculator__button btn-c"><button class="btn btn--red" data-reset="re">C</button></div>
+            </div>
+        </section>
+    </main>
 </body>
 </html>
