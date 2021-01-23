@@ -1,5 +1,5 @@
 function add(fVal, sVal) {
-  return fVal + sVal;
+  return +fVal + +sVal;
 }
 
 function subtract(fVal, sVal) {
@@ -9,13 +9,22 @@ function subtract(fVal, sVal) {
 function multiply(fVal, sVal) {
   return fVal * sVal;
 }
+
 function divide(fVal, sVal) {
   return fVal / sVal;
 }
 
 function printNumber(number) {
+  resetInput();
   clearContentOnce();
   inputDisplay.textContent += number;
+}
+
+function resetInput() {
+  if (pressedEqual) {
+    inputValue = "";
+    pressedEqual = false;
+  }
 }
 
 function clearContentOnce() {
@@ -42,14 +51,17 @@ function calculate() {
 function resetData() {
   eraseContent = true;
   allowCalculate = false;
+  pressedEqual = false;
   inputValue = "";
   inputDisplay.textContent = 0;
 }
 // Global Variables
 let eraseContent = true;
 let allowCalculate = false;
-const inputDisplay = document.querySelector(".calculator__result");
+let pressedEqual = false;
 let inputValue = "";
+let globalSecond = "";
+const inputDisplay = document.querySelector(".calculator__result");
 const numbers = document.querySelectorAll("[data-number]");
 const operators = document.querySelectorAll("[data-operator]");
 const reset = document.querySelector(".reset");
@@ -84,11 +96,9 @@ operators.forEach((operator) => {
 
     if (operator) {
       eraseContent = true;
-
+      pressedEqual = false;
       if (allowCalculate) {
-        console.log(inputValue);
         inputDisplay.textContent = calculate();
-        console.log(inputValue);
       }
 
       allowCalculate = true;
@@ -97,8 +107,20 @@ operators.forEach((operator) => {
   });
 });
 
-// Reset
+// Reset button
 
 reset.addEventListener("click", () => {
   resetData();
+});
+
+// Equal button
+
+equal.addEventListener("click", () => {
+  eraseContent = true;
+  if (allowCalculate) {
+    printNumber(calculate());
+    allowCalculate = false;
+  }
+  eraseContent = true;
+  pressedEqual = true;
 });
