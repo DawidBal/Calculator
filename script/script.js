@@ -17,7 +17,12 @@ function divide(fVal, sVal) {
 function printNumber(number) {
   resetInput();
   clearContentOnce();
-  inputDisplay.textContent += number;
+
+  if (inputDisplay.textContent <= 1 && number == ".") {
+    inputDisplay.textContent = "0" + number;
+  } else {
+    inputDisplay.textContent += number;
+  }
 }
 
 function resetInput() {
@@ -39,6 +44,10 @@ function calculate() {
   const firstNumber = splitInput[0];
   const operator = splitInput[1];
   const secondNumber = splitInput[2];
+
+  if (operator == "/" && secondNumber == "0") {
+    return "Nie dziel przez zero gagatku!";
+  }
 
   if (secondNumber == "") {
     inputValue = operate[operator](+firstNumber, +firstNumber);
@@ -82,8 +91,11 @@ numbers.forEach((number) => {
     const number = e.target.getAttribute("data-number");
 
     if (number) {
-      printNumber(number);
-      inputValue += number;
+      if (!(inputDisplay.textContent.includes(".") && number == ".")) {
+        inputValue += number;
+        console.log(inputValue);
+        printNumber(number);
+      }
     }
   });
 });
