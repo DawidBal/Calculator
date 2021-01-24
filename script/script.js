@@ -49,6 +49,10 @@ function calculate() {
     return "Nie dziel przez zero gagatku!";
   }
 
+  if (firstNumber == ".") {
+    return "0";
+  }
+
   if (secondNumber == "") {
     inputValue = operate[operator](+firstNumber, +firstNumber);
   } else {
@@ -62,14 +66,17 @@ function resetData() {
   allowCalculate = false;
   pressedEqual = false;
   inputValue = "";
+  allowDot = true;
   inputDisplay.textContent = 0;
 }
+
 // Global Variables
 let eraseContent = true;
 let allowCalculate = false;
 let pressedEqual = false;
 let inputValue = "";
 let globalSecond = "";
+let allowDot = true;
 const inputDisplay = document.querySelector(".calculator__result");
 const numbers = document.querySelectorAll("[data-number]");
 const operators = document.querySelectorAll("[data-operator]");
@@ -89,13 +96,12 @@ const operate = {
 numbers.forEach((number) => {
   number.addEventListener("click", (e) => {
     const number = e.target.getAttribute("data-number");
-
-    if (number) {
-      if (!(inputDisplay.textContent.includes(".") && number == ".")) {
-        inputValue += number;
-        console.log(inputValue);
-        printNumber(number);
+    if (!(number == "." && allowDot == false)) {
+      if (number == ".") {
+        allowDot = false;
       }
+      inputValue += number;
+      printNumber(number);
     }
   });
 });
@@ -106,16 +112,16 @@ operators.forEach((operator) => {
   operator.addEventListener("click", (e) => {
     const operator = e.target.getAttribute("data-operator");
 
-    if (operator) {
-      eraseContent = true;
-      pressedEqual = false;
-      if (allowCalculate) {
-        inputDisplay.textContent = calculate();
-      }
+    allowDot = true;
+    eraseContent = true;
+    pressedEqual = false;
 
-      allowCalculate = true;
-      inputValue += operator;
+    if (allowCalculate) {
+      inputDisplay.textContent = calculate();
     }
+
+    allowCalculate = true;
+    inputValue += operator;
   });
 });
 
