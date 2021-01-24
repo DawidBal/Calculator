@@ -79,10 +79,10 @@ body {
 }
 
 .calculator__display {
-  font-size: 1.5rem;
+  font-size: 2rem;
   padding: 1rem;
   margin: 1rem;
-  height: 61px;
+  height: 70px;
 
   background: var(--green);
   border: 1px solid var(--green);
