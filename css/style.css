@@ -1,17 +1,19 @@
 /* Global */
 
 :root {
-  --grey: rgb(63, 63, 66);
-  --greyshadow: rgb(19, 19, 20);
-  --lightgrey: rgb(202, 202, 202);
-  --lgshadow: rgb(156, 156, 156);
-  --green: rgb(86, 105, 82);
-  --greenshadow: rgb(53, 65, 51);
+  --grey: hsl(240, 3%, 30%);
+  --greyshadow: hsl(240, 3%, 15%);
+  --lightgrey: hsl(0, 0%, 80%);
+  --lgshadow: hsl(0, 0%, 65%);
+  --green: hsl(110, 12%, 40%);
+  --greenshadow: hsl(111, 12%, 27%);
   --white: rgb(255, 255, 255);
-  --orange: rgb(253, 176, 8);
-  --orangeshadow: rgb(192, 133, 4);
-  --red: rgb(194, 31, 3);
-  --redshadow: rgb(133, 23, 4);
+  --orange: hsl(41, 98%, 50%);
+  --orangeshadow: hsl(41, 98%, 35%);
+  --red: hsl(9, 97%, 40%);
+  --redshadow: hsl(9, 97%, 25%);
+  --blue: hsl(212, 100%, 50%);
+  --blueshadow: hsl(212, 100%, 35%);
 }
 
 html {
@@ -46,13 +48,13 @@ body {
 
 /* Content */
 .main {
-  width: 80%;
+  width: 100%;
   margin: 0 auto;
-  padding: 20px;
+  padding: 2rem;
 }
 
 .calculator {
-  width: 100%;
+  width: 400px;
   background: var(--grey);
   border-radius: 15px;
   box-shadow: 0 3px 0 var(--greyshadow);
@@ -68,7 +70,7 @@ body {
   grid-template-columns: repeat(3, calc(25% - 6px));
   grid-template-rows: repeat(5, 1fr);
   grid-template-areas:
-    "Reset Reset Divide Multi"
+    "Reset Back Divide Multi"
     "Seven Eight Nine Subst"
     "Four Five Six Add"
     "One Two Three Equal"
@@ -106,12 +108,21 @@ body {
   border: 1px solid var(--lightgrey);
   border-radius: 15px;
   box-shadow: 0 3px 0 var(--lgshadow);
+  transition: 0.2s;
 }
 
 .btn--orange {
   background: var(--orange);
   border: 1px solid var(--orange);
   box-shadow: 0 3px 0 var(--orangeshadow);
+  color: var(--white);
+  font-weight: bold;
+}
+
+.btn--blue {
+  background: var(--blue);
+  border: 1px solid var(--blue);
+  box-shadow: 0 3px 0 var(--blueshadow);
   color: var(--white);
   font-weight: bold;
 }
@@ -194,4 +205,8 @@ body {
 
 .btn-add {
   grid-area: Add;
+}
+
+.btn-b {
+  grid-area: Back;
 }
