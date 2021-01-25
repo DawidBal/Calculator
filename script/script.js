@@ -96,6 +96,7 @@ function undo() {
     printNumber(displayTextArr.join(""));
   }
   if (displayTextArr.length <= 0 && displayText != "0" && allowUndo) {
+    inputValue += "0";
     printNumber("0");
     eraseContent = true;
   }
@@ -148,7 +149,7 @@ numbers.forEach((number) => {
 operators.forEach((operator) => {
   operator.addEventListener("click", ({ target }) => {
     const operator = target.getAttribute("data-operator");
-
+    allowUndo = false;
     allowDot = true;
     eraseContent = true;
     pressedEqual = false;
@@ -156,7 +157,6 @@ operators.forEach((operator) => {
     if (allowCalculate) {
       printNumber(calculate());
       eraseContent = true;
-      allowUndo = false;
     }
 
     allowCalculate = true;
