@@ -17,7 +17,6 @@ function divide(fVal, sVal) {
 function printNumber(number) {
   resetInput();
   clearContentOnce();
-
   if (inputDisplay.textContent <= 1 && number == ".") {
     inputDisplay.textContent = "0" + number;
   } else {
@@ -67,21 +66,56 @@ function resetData() {
   pressedEqual = false;
   inputValue = "";
   allowDot = true;
+  allowUndo = true;
   inputDisplay.textContent = 0;
+}
+
+function evalExp() {
+  eraseContent = true;
+  allowUndo = false;
+  if (allowCalculate) {
+    printNumber(calculate());
+    allowCalculate = false;
+    eraseContent = true;
+  }
+  pressedEqual = true;
+}
+
+function undo() {
+  let displayText = inputDisplay.textContent;
+  let displayTextArr = displayText.split("");
+
+  if (displayTextArr.length >= 1 && displayText != "0" && allowUndo) {
+    let inputValueArr = inputValue.split("");
+
+    displayTextArr.pop();
+    inputValueArr.pop();
+
+    inputValue = inputValueArr.join("");
+    eraseContent = true;
+    printNumber(displayTextArr.join(""));
+  }
+  if (displayTextArr.length <= 0 && displayText != "0" && allowUndo) {
+    printNumber("0");
+    eraseContent = true;
+  }
 }
 
 // Global Variables
 let eraseContent = true;
 let allowCalculate = false;
 let pressedEqual = false;
-let inputValue = "";
-let globalSecond = "";
 let allowDot = true;
+let allowUndo = true;
+let inputValue = "";
+
 const inputDisplay = document.querySelector(".calculator__result");
 const numbers = document.querySelectorAll("[data-number]");
 const operators = document.querySelectorAll("[data-operator]");
-const reset = document.querySelector(".reset");
-const equal = document.querySelector(".equal");
+
+const resetBtn = document.querySelector(".reset");
+const equalBtn = document.querySelector(".equal");
+const backBtn = document.querySelector(".back");
 
 // Math operations
 const operate = {
@@ -94,14 +128,17 @@ const operate = {
 // Numbers
 
 numbers.forEach((number) => {
-  number.addEventListener("click", (e) => {
-    const number = e.target.getAttribute("data-number");
+  number.addEventListener("click", ({ target }) => {
+    const number = target.getAttribute("data-number");
+    allowUndo = true;
     if (!(number == "." && allowDot == false)) {
       if (number == ".") {
         allowDot = false;
       }
-      inputValue += number;
-      printNumber(number);
+      if (!(inputDisplay.textContent == "0" && number == "0")) {
+        inputValue += number;
+        printNumber(number);
+      }
     }
   });
 });
@@ -109,15 +146,17 @@ numbers.forEach((number) => {
 // Operators
 
 operators.forEach((operator) => {
-  operator.addEventListener("click", (e) => {
-    const operator = e.target.getAttribute("data-operator");
+  operator.addEventListener("click", ({ target }) => {
+    const operator = target.getAttribute("data-operator");
 
     allowDot = true;
     eraseContent = true;
     pressedEqual = false;
 
     if (allowCalculate) {
-      inputDisplay.textContent = calculate();
+      printNumber(calculate());
+      eraseContent = true;
+      allowUndo = false;
     }
 
     allowCalculate = true;
@@ -127,18 +166,12 @@ operators.forEach((operator) => {
 
 // Reset button
 
-reset.addEventListener("click", () => {
-  resetData();
-});
+resetBtn.addEventListener("click", resetData);
 
 // Equal button
 
-equal.addEventListener("click", () => {
-  eraseContent = true;
-  if (allowCalculate) {
-    printNumber(calculate());
-    allowCalculate = false;
-  }
-  eraseContent = true;
-  pressedEqual = true;
-});
+equalBtn.addEventListener("click", evalExp);
+
+// Back button
+
+backBtn.addEventListener("click", undo);
