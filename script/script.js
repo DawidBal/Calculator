@@ -1,3 +1,5 @@
+`use strict`;
+
 function add(fVal, sVal) {
   return +fVal + +sVal;
 }
@@ -60,7 +62,7 @@ function calculate() {
   return inputValue;
 }
 
-function resetData() {
+function resetCalc() {
   eraseContent = true;
   allowCalculate = false;
   pressedEqual = false;
@@ -102,6 +104,70 @@ function undo() {
   }
 }
 
+function keyCalc({ key }) {
+  const btnPressed = document.querySelector(`[data-key="${key}"]`);
+  switch (key) {
+    case "+":
+    case "-":
+    case "*":
+    case "/":
+      showOperator(btnPressed);
+      break;
+    case "0":
+    case "1":
+    case "2":
+    case "3":
+    case "4":
+    case "5":
+    case "6":
+    case "7":
+    case "8":
+    case "9":
+    case ".":
+      showNumber(btnPressed);
+      break;
+    case "Backspace":
+      undo(btnPressed);
+      break;
+    case "Escape":
+      resetCalc();
+      break;
+    case "Enter":
+      evalExp();
+      break;
+  }
+}
+
+function showNumber(target) {
+  const number = target.getAttribute("data-number");
+  allowUndo = true;
+  if (!(number == "." && allowDot == false)) {
+    if (number == ".") {
+      allowDot = false;
+    }
+    if (!(inputDisplay.textContent == "0" && number == "0")) {
+      inputValue += number;
+      printNumber(number);
+    }
+  }
+}
+
+function showOperator(target) {
+  const operator = target.getAttribute("data-operator");
+  allowUndo = false;
+  allowDot = true;
+  eraseContent = true;
+  pressedEqual = false;
+
+  if (allowCalculate) {
+    printNumber(calculate());
+    eraseContent = true;
+  }
+
+  allowCalculate = true;
+  inputValue += operator;
+}
+
 // Global Variables
 let eraseContent = true;
 let allowCalculate = false;
@@ -130,17 +196,7 @@ const operate = {
 
 numbers.forEach((number) => {
   number.addEventListener("click", ({ target }) => {
-    const number = target.getAttribute("data-number");
-    allowUndo = true;
-    if (!(number == "." && allowDot == false)) {
-      if (number == ".") {
-        allowDot = false;
-      }
-      if (!(inputDisplay.textContent == "0" && number == "0")) {
-        inputValue += number;
-        printNumber(number);
-      }
-    }
+    showNumber(target);
   });
 });
 
@@ -148,25 +204,13 @@ numbers.forEach((number) => {
 
 operators.forEach((operator) => {
   operator.addEventListener("click", ({ target }) => {
-    const operator = target.getAttribute("data-operator");
-    allowUndo = false;
-    allowDot = true;
-    eraseContent = true;
-    pressedEqual = false;
-
-    if (allowCalculate) {
-      printNumber(calculate());
-      eraseContent = true;
-    }
-
-    allowCalculate = true;
-    inputValue += operator;
+    showOperator(target);
   });
 });
 
 // Reset button
 
-resetBtn.addEventListener("click", resetData);
+resetBtn.addEventListener("click", resetCalc);
 
 // Equal button
 
@@ -175,3 +219,6 @@ equalBtn.addEventListener("click", evalExp);
 // Back button
 
 backBtn.addEventListener("click", undo);
+
+// Keyboard support
+document.addEventListener("keydown", keyCalc);
