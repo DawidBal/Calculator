@@ -75,7 +75,7 @@ body {
     "Four Five Six Add"
     "One Two Three Equal"
     "Zero Zero Dot Equal";
-  gap: 6px;
+  gap: 0.5rem;
 
   margin: 1rem;
 }
@@ -84,7 +84,6 @@ body {
   font-size: 2rem;
   padding: 1rem;
   margin: 1rem;
-  height: 70px;
 
   background: var(--green);
   border: 1px solid var(--green);
@@ -96,6 +95,9 @@ body {
 .calculator__result {
   display: block;
   text-align: right;
+  word-wrap: break-word;
+  margin: 0;
+  padding: 0;
 }
 
 /* Buttons Grid */
@@ -108,7 +110,7 @@ body {
   border: 1px solid var(--lightgrey);
   border-radius: 15px;
   box-shadow: 0 3px 0 var(--lgshadow);
-  transition: 0.2s;
+  transition: transform 0.2s;
 }
 
 .btn--orange {
