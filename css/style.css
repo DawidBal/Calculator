@@ -54,7 +54,7 @@ body {
 }
 
 .calculator {
-  width: 400px;
+  width: 25rem;
   background: var(--grey);
   border-radius: 15px;
   box-shadow: 0 3px 0 var(--greyshadow);
@@ -135,6 +135,10 @@ body {
   box-shadow: 0 3px 0 var(--redshadow);
   color: var(--white);
   font-weight: bold;
+}
+
+.btn--hover {
+  transform: scale(1.05);
 }
 
 .btn:hover {
