@@ -16,8 +16,11 @@ function divide(fVal, sVal) {
   return fVal / sVal;
 }
 
+function roundNumber(number) {
+  return Math.round(number * 1000) / 1000;
+}
+
 function printNumber(number) {
-  resetInput();
   clearContentOnce();
   if (inputDisplay.textContent <= 1 && number == ".") {
     inputDisplay.textContent = "0" + number;
@@ -45,9 +48,8 @@ function calculate() {
   const firstNumber = splitInput[0];
   const operator = splitInput[1];
   const secondNumber = splitInput[2];
-
   if (operator == "/" && secondNumber == "0") {
-    return "Nie dziel przez zero gagatku!";
+    return "You can't divide by zero";
   }
 
   if (firstNumber == ".") {
@@ -55,10 +57,11 @@ function calculate() {
   }
 
   if (secondNumber == "") {
-    inputValue = operate[operator](+firstNumber, +firstNumber);
+    inputValue = roundNumber(operate[operator](+firstNumber, +firstNumber));
   } else {
-    inputValue = operate[operator](+firstNumber, +secondNumber);
+    inputValue = roundNumber(operate[operator](+firstNumber, +secondNumber));
   }
+  console.log(inputValue);
   return inputValue;
 }
 
@@ -72,13 +75,14 @@ function resetCalc() {
   inputDisplay.textContent = 0;
 }
 
-function evalExp() {
+function equal() {
   eraseContent = true;
   allowUndo = false;
   if (allowCalculate) {
     printNumber(calculate());
     allowCalculate = false;
     eraseContent = true;
+    allowDot = true;
   }
   pressedEqual = true;
 }
@@ -90,8 +94,8 @@ function undo() {
   if (displayTextArr.length >= 1 && displayText != "0" && allowUndo) {
     let inputValueArr = inputValue.split("");
 
-    displayTextArr.pop();
-    inputValueArr.pop();
+    removeLastItem(displayTextArr);
+    removeLastItem(inputValueArr);
 
     inputValue = inputValueArr.join("");
     eraseContent = true;
@@ -104,41 +108,22 @@ function undo() {
   }
 }
 
-function keyCalc({ key }) {
-  const btnPressed = document.querySelector(`[data-key="${key}"]`);
-  switch (key) {
-    case "+":
-    case "-":
-    case "*":
-    case "/":
-      showOperator(btnPressed);
-      break;
-    case "0":
-    case "1":
-    case "2":
-    case "3":
-    case "4":
-    case "5":
-    case "6":
-    case "7":
-    case "8":
-    case "9":
-    case ".":
-      showNumber(btnPressed);
-      break;
-    case "Backspace":
-      undo(btnPressed);
-      break;
-    case "Escape":
-      resetCalc();
-      break;
-    case "Enter":
-      evalExp();
-      break;
-  }
+function removeLastItem(array) {
+  const deletedItem = array.pop();
+  if (deletedItem === ".") allowDot = true;
 }
 
-function showNumber(target) {
+function keyInput({ key }) {
+  const btnPressed = document.querySelector(`[data-key="${key}"]`);
+  if (key >= 0 && key <= 9) addNumber(btnPressed);
+  if (key === "Backspace") undo(btnPressed);
+  if (key === "+" || key === "-" || key === "*" || key === "/")
+    addOperator(btnPressed);
+  if (key === "Escape") resetCalc();
+  if (key === "Enter") equal();
+}
+
+function addNumber(target) {
   const number = target.getAttribute("data-number");
   allowUndo = true;
   if (!(number == "." && allowDot == false)) {
@@ -146,13 +131,14 @@ function showNumber(target) {
       allowDot = false;
     }
     if (!(inputDisplay.textContent == "0" && number == "0")) {
+      if (pressedEqual) resetInput();
       inputValue += number;
       printNumber(number);
     }
   }
 }
 
-function showOperator(target) {
+function addOperator(target) {
   const operator = target.getAttribute("data-operator");
   allowUndo = false;
   allowDot = true;
@@ -196,7 +182,7 @@ const operate = {
 
 numbers.forEach((number) => {
   number.addEventListener("click", ({ target }) => {
-    showNumber(target);
+    addNumber(target);
   });
 });
 
@@ -204,7 +190,7 @@ numbers.forEach((number) => {
 
 operators.forEach((operator) => {
   operator.addEventListener("click", ({ target }) => {
-    showOperator(target);
+    addOperator(target);
   });
 });
 
@@ -214,11 +200,11 @@ resetBtn.addEventListener("click", resetCalc);
 
 // Equal button
 
-equalBtn.addEventListener("click", evalExp);
+equalBtn.addEventListener("click", equal);
 
 // Back button
 
 backBtn.addEventListener("click", undo);
 
 // Keyboard support
-document.addEventListener("keydown", keyCalc);
+document.addEventListener("keydown", keyInput);
