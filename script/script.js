@@ -16,8 +16,36 @@ function divide(fVal, sVal) {
   return fVal / sVal;
 }
 
-function roundNumber(number) {
-  return Math.round(number * 1000) / 1000;
+function addNumber(target) {
+  const number = target.getAttribute("data-number");
+  allowUndo = true;
+  if (!(number == "." && allowDot == false)) {
+    if (number == ".") {
+      allowDot = false;
+    }
+
+    if (!(inputDisplay.textContent == "0" && number == "0")) {
+      if (pressedEqual) resetInput();
+      inputValue += number;
+      printNumber(number);
+    }
+  }
+}
+
+function addOperator(target) {
+  const operator = target.getAttribute("data-operator");
+  allowUndo = false;
+  allowDot = true;
+  eraseContent = true;
+  pressedEqual = false;
+
+  if (allowCalculate) {
+    printNumber(calculate());
+    eraseContent = true;
+  }
+
+  allowCalculate = true;
+  inputValue += operator;
 }
 
 function printNumber(number) {
@@ -26,20 +54,6 @@ function printNumber(number) {
     inputDisplay.textContent = "0" + number;
   } else {
     inputDisplay.textContent += number;
-  }
-}
-
-function resetInput() {
-  if (pressedEqual) {
-    inputValue = "";
-    pressedEqual = false;
-  }
-}
-
-function clearContentOnce() {
-  if (eraseContent) {
-    eraseContent = false;
-    inputDisplay.textContent = "";
   }
 }
 
@@ -61,18 +75,7 @@ function calculate() {
   } else {
     inputValue = roundNumber(operate[operator](+firstNumber, +secondNumber));
   }
-  console.log(inputValue);
   return inputValue;
-}
-
-function resetCalc() {
-  eraseContent = true;
-  allowCalculate = false;
-  pressedEqual = false;
-  inputValue = "";
-  allowDot = true;
-  allowUndo = true;
-  inputDisplay.textContent = 0;
 }
 
 function equal() {
@@ -97,8 +100,8 @@ function undo() {
     removeLastItem(displayTextArr);
     removeLastItem(inputValueArr);
 
-    inputValue = inputValueArr.join("");
     eraseContent = true;
+    inputValue = inputValueArr.join("");
     printNumber(displayTextArr.join(""));
   }
   if (displayTextArr.length <= 0 && displayText != "0" && allowUndo) {
@@ -108,50 +111,60 @@ function undo() {
   }
 }
 
+function keyInput({ key }) {
+  const btnPressed = document.querySelector(`[data-key="${key}"]`);
+
+  if (btnPressed != null) {
+    btnPressed.classList.add("btn--hover");
+    btnPressed.addEventListener("transitionend", removeTransition);
+
+    if (key >= 0 && key <= 9) addNumber(btnPressed);
+    if (key === ".") addNumber(btnPressed);
+    if (key === "Enter") equal();
+    if (key === "Backspace") undo(btnPressed);
+    if (key === "+" || key === "-" || key === "*" || key === "/")
+      addOperator(btnPressed);
+    if (key === "Escape") resetCalc();
+  }
+}
+
+function clearContentOnce() {
+  if (eraseContent) {
+    eraseContent = false;
+    inputDisplay.textContent = "";
+  }
+}
+
+function roundNumber(number) {
+  return Math.round(number * 1000) / 1000;
+}
+
+function resetInput() {
+  if (pressedEqual) {
+    inputValue = "";
+    pressedEqual = false;
+  }
+}
+
+function removeTransition({ target }) {
+  if (target.classList.contains("btn--hover")) {
+    target.classList.remove("btn--hover");
+  }
+}
+
+function resetCalc() {
+  eraseContent = true;
+  allowCalculate = false;
+  pressedEqual = false;
+  inputValue = "";
+  allowDot = true;
+  allowUndo = true;
+  inputDisplay.textContent = 0;
+}
+
 function removeLastItem(array) {
   const deletedItem = array.pop();
   if (deletedItem === ".") allowDot = true;
-}
-
-function keyInput({ key }) {
-  const btnPressed = document.querySelector(`[data-key="${key}"]`);
-  if (key >= 0 && key <= 9) addNumber(btnPressed);
-  if (key === "Backspace") undo(btnPressed);
-  if (key === "+" || key === "-" || key === "*" || key === "/")
-    addOperator(btnPressed);
-  if (key === "Escape") resetCalc();
-  if (key === "Enter") equal();
-}
-
-function addNumber(target) {
-  const number = target.getAttribute("data-number");
-  allowUndo = true;
-  if (!(number == "." && allowDot == false)) {
-    if (number == ".") {
-      allowDot = false;
-    }
-    if (!(inputDisplay.textContent == "0" && number == "0")) {
-      if (pressedEqual) resetInput();
-      inputValue += number;
-      printNumber(number);
-    }
-  }
-}
-
-function addOperator(target) {
-  const operator = target.getAttribute("data-operator");
-  allowUndo = false;
-  allowDot = true;
-  eraseContent = true;
-  pressedEqual = false;
-
-  if (allowCalculate) {
-    printNumber(calculate());
-    eraseContent = true;
-  }
-
-  allowCalculate = true;
-  inputValue += operator;
 }
 
 // Global Variables
@@ -181,7 +194,7 @@ const operate = {
 // Numbers
 
 numbers.forEach((number) => {
-  number.addEventListener("click", ({ target }) => {
+  number.addEventListener("mousedown", ({ target }) => {
     addNumber(target);
   });
 });
@@ -189,22 +202,23 @@ numbers.forEach((number) => {
 // Operators
 
 operators.forEach((operator) => {
-  operator.addEventListener("click", ({ target }) => {
+  operator.addEventListener("mousedown", ({ target }) => {
     addOperator(target);
   });
 });
 
 // Reset button
 
-resetBtn.addEventListener("click", resetCalc);
+resetBtn.addEventListener("mousedown", resetCalc);
 
 // Equal button
 
-equalBtn.addEventListener("click", equal);
+equalBtn.addEventListener("mousedown", equal);
 
 // Back button
 
-backBtn.addEventListener("click", undo);
+backBtn.addEventListener("mousedown", undo);
 
 // Keyboard support
+
 document.addEventListener("keydown", keyInput);
