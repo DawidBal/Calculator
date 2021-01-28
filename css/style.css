@@ -54,7 +54,7 @@ body {
 }
 
 .calculator {
-  width: 25rem;
+  width: min(95%, 28.125rem);
   background: var(--grey);
   border-radius: 15px;
   box-shadow: 0 3px 0 var(--greyshadow);
